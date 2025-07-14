@@ -1,2 +1,4 @@
 # Public
-For Sharing Projects
+Welcome!!
+
+This repo is to share personal projects!
