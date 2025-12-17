@@ -15,9 +15,9 @@ FardemCompanyId = 974  #Companyid in Autotask voor ....
 ChangeEffectiveDate = '2026-01-01'  #datum waarop de wijziging ingaat
 
 #dev
-ATUsername = 'ep2ohtnssqtuitc@giantSB10102022.nl'
-ATAPIIntegrationCode = 'DHLGTSMHA4FFBAK4QGLXR7BZWGQ'
-ATSecret = 'w*7ELz@5~1aN8P#rH$c6d0$RX'
+ATUsername = ''
+ATAPIIntegrationCode = ''
+ATSecret = ''
 
 #Prod
 #ATUsername = ''
