@@ -6,6 +6,7 @@ import csv
 import os
 
 # fill thesevariables:
+IncludedContractCategoryIDs = [28, 27]  #lijst met contractcategorieen die meegenomen moeten worden, in dit geval pab en msc, scheiden met ,
 ExcludedServiceIds = [257]  # lijst met serviceids die uitgesloten moeten worden, in dit geval SMW, scheiden met ,
 ExcludedCompanyIds = []  #voor het uitsluiten van bepaalde bedrijven, scheiden met ,
 IndexPercentageChange = 3.1 #standaard percentage voor het wijzigen van de prijs
@@ -213,8 +214,27 @@ for company in companies:
                             'ContractName': contract['contractName'],
                             'Reason': 'Contract ends before change effective date'
                         })
-                        break
- 
+                        continue
+                
+                if contract['contractCategoryID'] not in IncludedContractCategoryIDs:
+                    print(
+                        Fore.YELLOW + 
+                        f"\nContract {contract['contractName']} heeft contractcategorie ID "
+                        f"{contract['contractCategoryID']}, wat niet in de lijst met mee te nemen "
+                        f"contractcategorieën zit: {IncludedContractCategoryIDs}.\n"
+                        "Dit is de reden dat dit contract wordt overgeslagen\n"
+                        "Gegevens opgeslagen voor latere export.\n"
+                        + Style.RESET_ALL
+                    )         
+                    SkippedChanges.append({
+                        'CompanyID': company['id'],
+                        'CompanyName': company['companyName'],
+                        'ContractID': contract['id'],
+                        'ContractName': contract['contractName'],
+                        'Reason': 'Contract category ID not included'
+                    })
+                    continue
+
                 print(
                     f"Contract index: {contract_index},\n"
                     f"Contract ID: {contract['id']},\n"
@@ -269,7 +289,7 @@ for company in companies:
                                 'CompanyName': company['companyName'],
                                 'ContractID': contract['id'],
                                 'ContractName': contract['contractName'],
-                                'ServiceID': service['id'],
+                                'ServiceID': service['serviceID'],
                                 'ServiceName': service['invoiceDescription'],
                                 'Reason': 'ServiceID was excluded'
                             })
@@ -326,7 +346,7 @@ for company in companies:
                                             'CompanyName': company['companyName'],
                                             'ContractID': contract['id'],
                                             'ContractName': contract['contractName'],
-                                            'ServiceID': service['id'],
+                                            'ServiceID': service['serviceID'],
                                             'ServiceName': service['invoiceDescription'],
                                             'CurrentPrice': service['unitPrice'],
                                             'ProposedPrice': new_price,
@@ -345,7 +365,7 @@ for company in companies:
                                             'CompanyName': company['companyName'],
                                             'ContractID': contract['id'],
                                             'ContractName': contract['contractName'],
-                                            'ServiceID': service['id'],
+                                            'ServiceID': service['serviceID'],
                                             'ServiceName': service['invoiceDescription'],
                                             'OldPrice': service['unitPrice'],
                                             'NewPrice': new_price
@@ -366,7 +386,7 @@ for company in companies:
                                         'CompanyName': company['companyName'],
                                         'ContractID': contract['id'],
                                         'ContractName': contract['contractName'],
-                                        'ServiceID': service['id'],
+                                        'ServiceID': service['serviceID'],
                                         'ServiceName': service['invoiceDescription'],
                                         'CurrentPrice': service['unitPrice'],
                                         'ProposedPrice': new_price,
